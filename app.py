@@ -4,17 +4,23 @@ import plotly.express as px
 
 from parser import parse, preprocess, STEPS
 
-title = {
-    'y': 0.95,
-    'x': 0.5,
-    'xanchor': 'center',
-    'yanchor': 'top',
-}
-labels = {
+LABELS = {
     'value': 'Absorption',
     'wavelength': 'Wavelength (nm)',
     'variable': 'Acquisition',
 }
+
+def plot(df, placeholder=None, showlegend=False, labels=None, title=''):
+    fig = px.line(df, labels=labels)
+    fig.update_layout(
+            showlegend=False,
+            title={
+                'text': title,
+                'y': 0.95,
+                'x': 0.5,
+                'xanchor': 'center',
+                'yanchor': 'top'})
+    (placeholder or st).plotly_chart(fig, use_container_width=True)
 
 
 if __name__ == '__main__':
@@ -48,8 +54,4 @@ if __name__ == '__main__':
     with open("README.md", "r") as readme:
         st.title(readme.readline().strip('#').strip())
         st.markdown(readme.read())
-    fig = px.line(df, labels=labels)
-    fig.update_layout(
-            showlegend=False,
-            title={'text': "Raw Acquisition", **title})
-    st.plotly_chart(fig, use_container_width=True)
+    plot(df, labels=LABELS, title="Raw Acquisitions")
