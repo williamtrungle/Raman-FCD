@@ -7,6 +7,7 @@ import pandas as pd
 sys.path.insert(0, 'py-wdf-reader')
 
 from renishawWiRE import WDFReader
+from ramanTools import bubblefill, cosmic_rays_removal, SNV, savgol_filter
 from pathlib import Path
 
 
@@ -28,4 +29,15 @@ def parse(file):
     df = df.interpolate(method='linear')
     df.index.name = 'wavelength'
     df = df.mean(axis=1)
+    return df
+
+def preprocess(df, *steps, window_length=11, polyorder=3, bubblewidths=40):
+    if "Cosmic Ray Removal" in steps:
+        df = df.apply(cosmic_rays_removal, raw=True)
+    if "Savgol" in steps:
+        df = df.apply(savgol_filter, raw=True, window_length=window_length, polyorder=polyorder)
+    if "Raman" in steps:
+        df = df.apply(bubblefill, raw=True, bubblewidths=bubblewidths)
+    if "SNV" in steps:
+        df = df.apply(SNV, raw=True)
     return df
