@@ -1,9 +1,10 @@
 import uuid
 import streamlit as st
+import numpy as np
 import pandas as pd
 import plotly.express as px
 
-from parser import readme, parse, preprocess, STEPS
+from parser import readme, parse, preprocess, STEPS, raman_shift_peak
 
 LABELS = {
     'value': 'Absorption',
@@ -97,3 +98,23 @@ if __name__ == '__main__':
             "Figure 2. "
             "Feature extraction via averaging of selected spectra. "
             f"{'. '.join([f'{k}: {len(v)} spectra' for k, v in features.items()])}.")
+
+    # Band selection
+    col = st.columns([1,2,1])[1]
+    col.header("Band selection")
+    col.markdown("Select band ranges in which peaks absorption occurs. "
+                 "This allows identification of characteristic molecular "
+                 "components of the scanned tissue "
+                 "(*e.g.* characteristic proteins fingerprint).")
+    n = int(col.number_input("Number of bands to create", 0))
+    peaks = {}
+    for i in range(n):
+        start, stop = col.select_slider(
+                "Wavelength",
+                options=df.index,
+                value=(df.index.min(), df.index.max()),
+                key=f"Band {i+1}")
+        peaks[f"{start} - {stop} (nm)"] = pd.Series([raman_shift_peak(df[col], start, stop)[0] for col in df.columns], index=df.columns)
+    peaks = pd.DataFrame(peaks)
+    if not peaks.empty:
+        col.dataframe(peaks)
