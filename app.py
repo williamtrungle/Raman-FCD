@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 
 from parser import parse
+from ramanTools import bubblefill, cosmic_rays_removal, SNV, savgol_filter
 
 
 if __name__ == '__main__':
