@@ -20,7 +20,7 @@ if __name__ == '__main__':
                 value=(df.index.min(), df.index.max()))
         df = df.loc[start:stop]
     with st.sidebar.header("Preprocessing"):
-        steps = st.sidebar.multiselect("Preprocessing", STEPS, "Raman")
+        steps = st.sidebar.multiselect("Preprocessing", STEPS, STEPS)
         with st.sidebar.expander("Parameters"):
             window_length = int(st.number_input("Window length", 0, value=11))
             polyorder = int(st.number_input("Polyorder", 0, value=3))
