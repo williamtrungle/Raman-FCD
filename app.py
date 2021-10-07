@@ -12,8 +12,15 @@ LABELS = {
     'variable': 'Acquisition',
 }
 
-def plot(df, placeholder=None, showlegend=False, labels=None, hovermode='closest', title=''):
+def plot(df, *lines, placeholder=None, showlegend=False, labels=None, hovermode='closest', title=''):
     fig = px.line(df, labels=labels)
+    for line in lines:
+        fig.add_vline(
+                x=line[0],
+                line_dash='dot',
+                line_color='#ccc')
+    for x, y in lines:
+        fig.add_annotation(x=x, y=y, text=x, yshift=1)
     fig.update_layout(
             showlegend=showlegend,
             hovermode=hovermode,
@@ -108,13 +115,21 @@ if __name__ == '__main__':
                  "(*e.g.* characteristic proteins fingerprint).")
     n = int(col.number_input("Number of bands to create", 0))
     peaks = {}
-    for i in range(n):
-        start, stop = col.select_slider(
-                "Wavelength",
-                options=df.index,
-                value=(df.index.min(), df.index.max()),
-                key=f"Band {i+1}")
-        peaks[f"{start} - {stop} (nm)"] = pd.Series([raman_shift_peak(df[col], start, stop)[0] for col in df.columns], index=df.columns)
+    absorption = {}
+    with col.form("Bands"):
+        for i in range(n):
+            start, stop = st.select_slider(
+                    "Wavelength",
+                    options=df.index,
+                    value=(df.index.min(), df.index.max()),
+                    key=f"Band {i+1}")
+            p, a = zip(*[raman_shift_peak(df[col], start, stop) for col in df.columns])
+            peaks[f"{start} - {stop} (nm)"] = pd.Series(p, index=df.columns)
+            absorption[f"{start} - {stop} (nm)"] = pd.Series(a, index=df.columns)
+        st.form_submit_button("Fingerprint")
     peaks = pd.DataFrame(peaks).T
+    absorption = pd.DataFrame(absorption).T
     if not peaks.empty:
         col.dataframe(peaks)
+        for col in df.columns:
+            plot(df[col], *zip(peaks[col], absorption[col]), labels=LABELS, title=col, hovermode='x')
