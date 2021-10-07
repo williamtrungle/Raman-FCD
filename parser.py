@@ -11,6 +11,9 @@ from ramanTools import bubblefill, cosmic_rays_removal, SNV, savgol_filter
 from pathlib import Path
 
 
+STEPS = "Cosmic Ray Removal", "Savgol", "Raman", "SNV"
+
+
 def parse(file):
     if isinstance(file, io.BytesIO):
         with tempfile.TemporaryDirectory() as tmp:
@@ -30,6 +33,7 @@ def parse(file):
     df.index.name = 'wavelength'
     df = df.mean(axis=1)
     return df
+
 
 def preprocess(df, *steps, window_length=11, polyorder=3, bubblewidths=40):
     if "Cosmic Ray Removal" in steps:
