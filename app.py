@@ -31,14 +31,13 @@ if __name__ == '__main__':
     with st.sidebar.header("Renishaw Acquisition"):
         files = st.sidebar.file_uploader("Spectral data", ["wdf"], True)
         df = pd.DataFrame({file.name: parse(file) for file in files})
-        st.sidebar.metric("Total Acquisitions", f"{len(df.columns)} spectra")
+    with st.sidebar.header("Preprocessing"):
         start, stop = st.sidebar.select_slider(
-                "Wavelength range",
+                "Wavelength (nm)",
                 options=df.index,
                 value=(df.index.min(), df.index.max()))
         df = df.loc[start:stop]
-    with st.sidebar.header("Preprocessing"):
-        steps = st.sidebar.multiselect("Preprocessing", STEPS, STEPS)
+        steps = st.sidebar.multiselect("Filters", STEPS, STEPS)
         with st.sidebar.expander("Parameters"):
             window_length = int(st.number_input("Window length", 0, value=11))
             polyorder = int(st.number_input("Polyorder", 0, value=3))
