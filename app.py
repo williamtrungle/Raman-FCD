@@ -115,6 +115,6 @@ if __name__ == '__main__':
                 value=(df.index.min(), df.index.max()),
                 key=f"Band {i+1}")
         peaks[f"{start} - {stop} (nm)"] = pd.Series([raman_shift_peak(df[col], start, stop)[0] for col in df.columns], index=df.columns)
-    peaks = pd.DataFrame(peaks)
+    peaks = pd.DataFrame(peaks).T
     if not peaks.empty:
         col.dataframe(peaks)
