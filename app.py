@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 
 from parser import parse
 
@@ -17,4 +18,13 @@ if __name__ == '__main__':
     with open("README.md", "r") as readme:
         st.title(readme.readline().strip('#').strip())
         st.markdown(readme.read())
-    st.line_chart(df)
+    fig = px.line(df, labels={'value': 'Absorption', 'wavelength': 'Wavelength (nm)'})
+    fig.update_layout(
+            showlegend=False,
+            title={
+                    'text': "Raw Acquisition",
+                    'y':0.95,
+                    'x':0.5,
+                    'xanchor': 'center',
+                    'yanchor': 'top'})
+    st.plotly_chart(fig, use_container_width=True)
