@@ -59,3 +59,22 @@ if __name__ == '__main__':
     plot(df, labels=LABELS, title="Raw Acquisitions")
     _, col, _ = st.columns([1,2,1])
     col.caption("Figure 1. Raw acquisition data after preprocessing. Steps include: "+', '.join(steps)+'.')
+
+    # Feature selection
+    _, col, _ = st.columns([1,2,1])
+    col.header("Feature selection")
+    col.markdown("Create new features by averaging existing spectra together under a new name.")
+    features = {}
+    n = int(col.number_input("Number of features to create", 0))
+    with col.form("Features"):
+        for i in range(n):
+            with st.expander(f"Feature {i}"):
+                name = st.text_input("Name", key=f"Feature {i}")
+                values = list(filter(lambda x: st.checkbox(x, key=f"Values {i}"), df.columns))
+                features[name] = values
+        st.form_submit_button("Combine")
+    for name, col in features.items():
+        df[name] = df[col].mean(axis=1)
+    df = df.drop(columns=set(sum(features.values(), [])))
+    with st.empty() as chart:
+        plot(df, chart, labels=LABELS, title="Combined Acquisitions", showlegend=True, hovermode='x')
