@@ -63,12 +63,12 @@ if __name__ == '__main__':
                 bubblewidths=bubblewidths)
 
     # Description
-    _, col, _ = st.columns([1,2,1])
+    col = st.columns([1,2,1])[1]
     title, body = readme()
     col.title(title)
     col.markdown(body+"To begin, upload data using the sidebar.")
     plot(df, labels=LABELS, title="Raw Acquisitions")
-    _, col, _ = st.columns([1,2,1])
+    col = st.columns([1,2,1])[1]
     col.caption(
             "Figure 1. "
             "Raw acquisition data after preprocessing. "
@@ -76,23 +76,23 @@ if __name__ == '__main__':
             f"{', '.join(steps)}.")
 
     # Feature selection
-    _, col, _ = st.columns([1,2,1])
+    col = st.columns([1,2,1])[1]
     col.header("Feature selection")
     col.markdown("Create new features by averaging existing spectra together under a new name.")
     n = int(col.number_input("Number of features to create", 0))
     with col.form("Features"):
         features = {}
         for i in range(n):
-            with st.expander(f"Feature {i}"):
-                name = st.text_input("Name", key=f"Feature {i}")
-                values = list(filter(lambda x: st.checkbox(x, key=f"Values {i}"), df.columns))
+            with st.expander(f"Feature {i+1}"):
+                name = st.text_input("Name", key=f"Feature {i+1}")
+                values = list(filter(lambda x: st.checkbox(x, key=f"Values {i+1}"), df.columns))
                 features[name] = values
         st.form_submit_button("Combine")
     for name, col in features.items():
         df[name] = df[col].mean(axis=1)
     df = df.drop(columns=set(sum(features.values(), [])))
     plot(df, labels=LABELS, title="Combined Acquisitions", showlegend=True, hovermode='x')
-    _, col, _ = st.columns([1,2,1])
+    col = st.columns([1,2,1])[1]
     col.caption(
             "Figure 2. "
             "Feature extraction via averaging of selected spectra. "
