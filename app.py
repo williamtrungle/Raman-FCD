@@ -53,4 +53,5 @@ if __name__ == '__main__':
     with open("README.md", "r") as readme:
         st.title(readme.readline().strip('#').strip())
         st.markdown(readme.read())
-    plot(df, labels=LABELS, title="Raw Acquisitions")
+    with st.empty() as chart:
+        plot(df, chart, labels=LABELS, title="Raw Acquisitions")
