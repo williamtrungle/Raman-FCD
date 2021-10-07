@@ -32,7 +32,7 @@ if __name__ == '__main__':
     # Sidebar
     with st.sidebar.header("Renishaw Acquisition"):
         files = st.sidebar.file_uploader("Spectral data", ["wdf"], True)
-        df = pd.DataFrame({file.name: parse(file) for file in files})
+        df = pd.DataFrame({file.name[:-4]: parse(file) for file in files})
     with st.sidebar.header("Preprocessing"):
         start, stop = st.sidebar.select_slider(
                 "Wavelength (nm)",
