@@ -14,6 +14,13 @@ from pathlib import Path
 STEPS = "Cosmic Ray Removal", "Savgol", "Raman", "SNV"
 
 
+def readme(file='README.md'):
+    with open("README.md", "r") as readme:
+        title = readme.readline().strip('#').strip()
+        body = readme.read()
+    return title, body
+
+
 def parse(file):
     if isinstance(file, io.BytesIO):
         with tempfile.TemporaryDirectory() as tmp:

@@ -1,8 +1,9 @@
+import uuid
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-from parser import parse, preprocess, STEPS
+from parser import readme, parse, preprocess, STEPS
 
 LABELS = {
     'value': 'Absorption',
@@ -50,9 +51,9 @@ if __name__ == '__main__':
                 polyorder=polyorder,
                 bubblewidths=bubblewidths)
 
-    # Main
-    with open("README.md", "r") as readme:
-        st.title(readme.readline().strip('#').strip())
-        st.markdown(readme.read())
-    with st.empty() as chart:
-        plot(df, chart, labels=LABELS, title="Raw Acquisitions")
+    # Description
+    title, body = readme()
+    st.title(title)
+    st.markdown(body+"To begin, upload data using the sidebar.")
+    plot(df, labels=LABELS, title="Raw Acquisitions")
+    st.caption("Figure 1. Raw acquisition data after preprocessing. Steps include: "+', '.join(steps)+'.')
