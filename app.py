@@ -18,6 +18,23 @@ if __name__ == '__main__':
             "Wavelength range",
             options=df.index,
             value=(df.index.min(), df.index.max()))
+    st.sidebar.header("Preprocessing")
+    preprocessing = st.sidebar.multiselect(
+            "Preprocessing",
+            ["Cosmic Ray Removal", "Savgol", "Raman", "SNV"],
+            "Raman")
+    with st.sidebar.expander("Parameters"):
+        window_length = int(st.number_input("Window length", 0, value=11))
+        polyorder = int(st.number_input("Polyorder", 0, value=3))
+        bubblewidths = int(st.number_input("Bubble widths", 0, value=40))
+    if "Cosmic Ray Removal" in preprocessing:
+        df = df.apply(cosmic_rays_removal, raw=True)
+    if "Savgol" in preprocessing:
+        df = df.apply(savgol_filter, raw=True, window_length=window_length, polyorder=polyorder)
+    if "Raman" in preprocessing:
+        df = df.apply(bubblefill, raw=True, bubblewidths=bubblewidths)
+    if "SNV" in preprocessing:
+        df = df.apply(SNV, raw=True)
 
     # Main
     with open("README.md", "r") as readme:
