@@ -59,7 +59,11 @@ if __name__ == '__main__':
     col.markdown(body+"To begin, upload data using the sidebar.")
     plot(df, labels=LABELS, title="Raw Acquisitions")
     _, col, _ = st.columns([1,2,1])
-    col.caption("Figure 1. Raw acquisition data after preprocessing. Steps include: "+', '.join(steps)+'.')
+    col.caption(
+            "Figure 1. "
+            "Raw acquisition data after preprocessing. "
+            "Steps include: "
+            f"{', '.join(steps)}.")
 
     # Feature selection
     _, col, _ = st.columns([1,2,1])
@@ -77,5 +81,9 @@ if __name__ == '__main__':
     for name, col in features.items():
         df[name] = df[col].mean(axis=1)
     df = df.drop(columns=set(sum(features.values(), [])))
-    with st.empty() as chart:
-        plot(df, chart, labels=LABELS, title="Combined Acquisitions", showlegend=True, hovermode='x')
+    plot(df, labels=LABELS, title="Combined Acquisitions", showlegend=True, hovermode='x')
+    _, col, _ = st.columns([1,2,1])
+    col.caption(
+            "Figure 2. "
+            "Feature extraction via averaging of selected spectra. "
+            f"{'. '.join([f'{k}: {len(v)} spectra' for k, v in features.items()])}.")
