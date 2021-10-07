@@ -12,12 +12,17 @@ if __name__ == '__main__':
     st.sidebar.header("Renishaw Acquisition")
     files = st.sidebar.file_uploader("Spectral data", ["wdf"], True)
     df = pd.DataFrame({file.name: parse(file) for file in files})
-    st.sidebar.metric("Acquisitions", f"{len(df.columns)} spectra")
+    st.sidebar.metric("Total Acquisitions", f"{len(df.columns)} spectra")
+    start, stop = st.sidebar.select_slider(
+            "Wavelength range",
+            options=df.index,
+            value=(df.index.min(), df.index.max()))
 
     # Main
     with open("README.md", "r") as readme:
         st.title(readme.readline().strip('#').strip())
         st.markdown(readme.read())
+    df = df.loc[start:stop]
     fig = px.line(df, labels={'value': 'Absorption', 'wavelength': 'Wavelength (nm)'})
     fig.update_layout(
             showlegend=False,
