@@ -11,11 +11,11 @@ LABELS = {
     'variable': 'Acquisition',
 }
 
-def plot(df, placeholder=None, showlegend=False, labels=None, title=''):
+def plot(df, placeholder=None, showlegend=False, labels=None, hovermode='closest', title=''):
     fig = px.line(df, labels=labels)
     fig.update_layout(
             showlegend=showlegend,
-            hovermode="x",
+            hovermode=hovermode,
             title={
                 'text': title,
                 'y': 0.95,
