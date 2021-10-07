@@ -1,3 +1,4 @@
+import yaml
 import uuid
 import streamlit as st
 import numpy as np
@@ -131,5 +132,8 @@ if __name__ == '__main__':
     absorption = pd.DataFrame(absorption).T
     if not peaks.empty:
         col.dataframe(peaks)
+        _, L, R, _ = st.columns([2,2,2,2])
+        L.download_button("Download Fingerprint", peaks.to_csv(), "raman-fingerprint.csv")
+        R.download_button("Download Combination", yaml.dump(features), "feature-selection.yaml")
         for col in df.columns:
             plot(df[col], *zip(peaks[col], absorption[col]), labels=LABELS, title=col, hovermode='x')
