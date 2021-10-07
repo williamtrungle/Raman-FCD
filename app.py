@@ -30,9 +30,19 @@ if __name__ == '__main__':
     st.set_page_config(page_title="Raman Spectroscopy", layout='wide')
 
     # Sidebar
-    with st.sidebar.header("Renishaw Acquisition"):
-        files = st.sidebar.file_uploader("Spectral data", ["wdf"], True)
-        df = pd.DataFrame({file.name[:-4]: parse(file) for file in files})
+    total = st.sidebar.empty()
+    st.sidebar.header("Renishaw Acquisition")
+    files = st.sidebar.file_uploader("Spectral data", ["wdf"], True)
+    df = {}
+    for file in files:
+        try:
+            data = parse(file)
+        except ValueError:
+            continue
+        else:
+            df[file.name[:-4]] = data
+    df = pd.DataFrame(df)
+    total.metric("Total", f"{len(df.columns)} files", f"{len(df.columns) - len(files)} errors")
     with st.sidebar.header("Preprocessing"):
         if not df.empty:
             start, stop = st.sidebar.select_slider(
