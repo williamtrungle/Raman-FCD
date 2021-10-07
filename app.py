@@ -69,9 +69,9 @@ if __name__ == '__main__':
     _, col, _ = st.columns([1,2,1])
     col.header("Feature selection")
     col.markdown("Create new features by averaging existing spectra together under a new name.")
-    features = {}
     n = int(col.number_input("Number of features to create", 0))
     with col.form("Features"):
+        features = {}
         for i in range(n):
             with st.expander(f"Feature {i}"):
                 name = st.text_input("Name", key=f"Feature {i}")
