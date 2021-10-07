@@ -27,7 +27,7 @@ def plot(df, placeholder=None, showlegend=False, labels=None, hovermode='closest
 
 if __name__ == '__main__':
     # Configuration
-    st.set_page_config(page_title="Raman Spectroscopy")
+    st.set_page_config(page_title="Raman Spectroscopy", layout='wide')
 
     # Sidebar
     with st.sidebar.header("Renishaw Acquisition"):
@@ -52,8 +52,10 @@ if __name__ == '__main__':
                 bubblewidths=bubblewidths)
 
     # Description
+    _, col, _ = st.columns([1,2,1])
     title, body = readme()
-    st.title(title)
-    st.markdown(body+"To begin, upload data using the sidebar.")
+    col.title(title)
+    col.markdown(body+"To begin, upload data using the sidebar.")
     plot(df, labels=LABELS, title="Raw Acquisitions")
-    st.caption("Figure 1. Raw acquisition data after preprocessing. Steps include: "+', '.join(steps)+'.')
+    _, col, _ = st.columns([1,2,1])
+    col.caption("Figure 1. Raw acquisition data after preprocessing. Steps include: "+', '.join(steps)+'.')
