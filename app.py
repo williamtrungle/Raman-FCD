@@ -13,7 +13,8 @@ LABELS = {
 def plot(df, placeholder=None, showlegend=False, labels=None, title=''):
     fig = px.line(df, labels=labels)
     fig.update_layout(
-            showlegend=False,
+            showlegend=showlegend,
+            hovermode="x",
             title={
                 'text': title,
                 'y': 0.95,
