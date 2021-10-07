@@ -1,0 +1,3 @@
+[submodule "py-wdf-reader"]
+	path = py-wdf-reader
+	url = git@gitlab.com:pauline.meilleure/py-wdf-reader.git
