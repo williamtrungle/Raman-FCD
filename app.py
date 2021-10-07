@@ -34,11 +34,12 @@ if __name__ == '__main__':
         files = st.sidebar.file_uploader("Spectral data", ["wdf"], True)
         df = pd.DataFrame({file.name[:-4]: parse(file) for file in files})
     with st.sidebar.header("Preprocessing"):
-        start, stop = st.sidebar.select_slider(
-                "Wavelength (nm)",
-                options=df.index,
-                value=(df.index.min(), df.index.max()))
-        df = df.loc[start:stop]
+        if not df.empty:
+            start, stop = st.sidebar.select_slider(
+                    "Wavelength (nm)",
+                    options=df.index,
+                    value=(df.index.min(), df.index.max()))
+            df = df.loc[start:stop]
         steps = st.sidebar.multiselect("Filters", STEPS, STEPS)
         with st.sidebar.expander("Parameters"):
             window_length = int(st.number_input("Window length", 0, value=11))
