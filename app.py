@@ -22,6 +22,7 @@ def plot(df, *lines, placeholder=None, showlegend=False, labels=None, hovermode=
                 line_color='#ccc')
     for x, y in lines:
         fig.add_annotation(x=x, y=y, text=x, yshift=1)
+    fig.update_traces(hovertemplate='%{y:.2f}')
     fig.update_layout(
             showlegend=showlegend,
             hovermode=hovermode,
@@ -100,7 +101,7 @@ if __name__ == '__main__':
     for name, col in features.items():
         df[name] = df[col].mean(axis=1)
     df = df.drop(columns=set(sum(features.values(), [])))
-    plot(df, labels=LABELS, title="Combined Acquisitions", showlegend=True, hovermode='x')
+    plot(df, labels=LABELS, title="Combined Acquisitions", showlegend=True, hovermode='x unified')
     col = st.columns([1,2,1])[1]
     col.caption(
             "Figure 2. "
@@ -136,4 +137,4 @@ if __name__ == '__main__':
         L.download_button("Download Fingerprint", peaks.to_csv(), "raman-fingerprint.csv")
         R.download_button("Download Combination", yaml.dump(features), "feature-selection.yaml")
         for col in df.columns:
-            plot(df[col], *zip(peaks[col], absorption[col]), labels=LABELS, title=col, hovermode='x')
+            plot(df[col], *zip(peaks[col], absorption[col]), labels=LABELS, title=col, hovermode='x unified')
