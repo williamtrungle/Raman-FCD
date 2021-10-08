@@ -21,6 +21,10 @@ def readme(file='README.md'):
     return title, body
 
 
+def metadata(file='metadata/molecular-signature.csv'):
+    return pd.read_csv(file, index_col=0)
+
+
 def parse(file):
     if isinstance(file, io.BytesIO):
         with tempfile.TemporaryDirectory() as tmp:

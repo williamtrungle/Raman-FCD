@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 
-from parser import readme, parse, preprocess, STEPS, raman_shift_peak
+from parser import readme, metadata, parse, preprocess, STEPS, raman_shift_peak
 
 LABELS = {
     'value': 'Absorption',
@@ -46,6 +46,7 @@ if __name__ == '__main__':
     # Configuration
     st.set_page_config(page_title="Raman Spectroscopy", layout='wide')
     title, body = readme()
+    molecular = metadata()
 
     # Sidebar
     total = st.sidebar.empty()
