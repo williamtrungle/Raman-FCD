@@ -15,7 +15,6 @@ LABELS = {
 
 def plot(df,
         *lines,
-        metadata=None,
         placeholder=None,
         showlegend=False,
         labels=None,

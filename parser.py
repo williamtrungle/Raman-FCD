@@ -22,7 +22,7 @@ def readme(file='README.md'):
 
 
 def metadata(file='metadata/molecular-signature.csv'):
-    return pd.read_csv(file, index_col=0)
+    return pd.read_csv(file, index_col=0)['Content']
 
 
 def parse(file):
