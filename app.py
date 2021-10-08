@@ -143,5 +143,11 @@ if __name__ == '__main__':
         _, L, R, _ = st.columns([2,2,2,2])
         L.download_button("Download Fingerprint", peaks.to_csv(), "raman-fingerprint.csv")
         R.download_button("Download Combination", yaml.dump(features), "feature-selection.yaml")
-        for col in df.columns:
-            plot(df[col], *zip(peaks[col], absorption[col]), labels=LABELS, title=col, hovermode='x unified')
+        _, col, _ = st.columns([1,2,1])
+        col.header("Raman Fingerprint")
+        for feature in df.columns:
+            plot(df[feature], *zip(peaks[feature], absorption[feature]), labels=LABELS, title=feature, hovermode='x unified')
+            _, col, _ = st.columns([1,2,1])
+            for wavelength, description in molecular[molecular.index.intersection(peaks[feature])].iteritems():
+                col.subheader(f"{wavelength} nm")
+                col.markdown(description)
