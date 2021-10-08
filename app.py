@@ -38,6 +38,7 @@ def plot(df, *lines, placeholder=None, showlegend=False, labels=None, hovermode=
 if __name__ == '__main__':
     # Configuration
     st.set_page_config(page_title="Raman Spectroscopy", layout='wide')
+    title, body = readme()
 
     # Sidebar
     total = st.sidebar.empty()
@@ -74,7 +75,6 @@ if __name__ == '__main__':
 
     # Description
     col = st.columns([1,2,1])[1]
-    title, body = readme()
     col.title(title)
     col.markdown(body+"To begin, upload data using the sidebar.")
     plot(df, labels=LABELS, title="Raw Acquisitions")
