@@ -13,7 +13,14 @@ LABELS = {
     'variable': 'Acquisition',
 }
 
-def plot(df, *lines, placeholder=None, showlegend=False, labels=None, hovermode='closest', title=''):
+def plot(df,
+        *lines,
+        metadata=None,
+        placeholder=None,
+        showlegend=False,
+        labels=None,
+        hovermode='closest',
+        title=''):
     fig = px.line(df, labels=labels)
     for line in lines:
         fig.add_vline(
