@@ -146,8 +146,23 @@ if __name__ == '__main__':
         _, col, _ = st.columns([1,2,1])
         col.header("Raman Fingerprint")
         for feature in df.columns:
-            plot(df[feature], *zip(peaks[feature], absorption[feature]), labels=LABELS, title=feature, hovermode='x unified')
+            fig = st.container()
             _, col, _ = st.columns([1,2,1])
-            for wavelength, description in molecular[molecular.index.intersection(peaks[feature])].iteritems():
-                col.subheader(f"{wavelength} nm")
-                col.markdown(description)
+            bands = col.multiselect("Bands", list(peaks.index), list(peaks.index), key=f"{feature} bands")
+            plot(df,
+                    *zip(peaks[feature][bands], absorption[feature][bands]),
+                    labels=LABELS,
+                    title=feature,
+                    hovermode='x unified',
+                    placeholder=fig)
+            _, col, _ = st.columns([1,2,1])
+            for i, (wavelength, descriptions) in enumerate(molecular[molecular.index.intersection(peaks[feature][bands])].groupby("Wavelength")):
+                current = absorption[feature].iloc[i]
+                others = df.loc[wavelength].drop(index=feature).max()
+                intensity = current - others
+                col.metric(
+                        peaks[feature].index[i],
+                        wavelength,
+                        f"{intensity:.2f}")
+                for description in descriptions:
+                    col.markdown(f"- {description}")
