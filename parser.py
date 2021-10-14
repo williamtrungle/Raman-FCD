@@ -21,8 +21,14 @@ def readme(file='README.md'):
     return title, body
 
 
-def metadata(file='metadata/molecular-signature.csv'):
-    return pd.read_csv(file, index_col=0)['Content']
+def metadata(file='metadata/molecular-signature2.csv'):
+    df = pd.read_csv(file)
+    sig = []
+    for _, (start, stop, content) in df.iterrows():
+        for i in range(int(start), int(stop+1)):
+            sig.append({'Wavelength': i, 'Content': content})
+    sig = pd.DataFrame(sig).set_index('Wavelength')['Content']
+    return sig
 
 
 def parse(file):
